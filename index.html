@@ -396,7 +396,13 @@
         /* --- MOBILE --- */
         .menu-toggle { display: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
         @media (max-width: 960px) {
-            header { width: 90%; top: 15px; padding: 15px 20px; }
+            /* AJUSTE MENU MOVIL - MÁS CORTO Y CENTRADO */
+            header { 
+                width: 85%; /* Achicado del 90% */
+                top: 15px; 
+                padding: 10px 15px; /* Menos padding lateral acerca los elementos */
+            }
+            
             nav { position: absolute; top: 70px; left: 0; width: 100%; background: #0a0b10; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; display: none; flex-direction: column; }
             nav.active { display: flex; }
             nav ul { flex-direction: column; gap: 15px; width: 100%; }
