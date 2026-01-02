@@ -32,7 +32,7 @@
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 80px;
+            padding-bottom: 0px; /* Ajustado para el nuevo footer */
         }
 
         /* --- FONDO ANIMADO --- */
@@ -207,45 +207,81 @@
         }
         @keyframes pulseWA { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
-        /* --- IA CHAT --- */
-        .ai-section {
-            background: radial-gradient(circle at 50% 50%, rgba(10, 11, 20, 1), #050505);
-            border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: 100px; width: 100%; max-width: 900px;
+        /* --- FOOTER 3D (NUEVO) --- */
+        .footer-3d-wrapper {
+            position: relative;
+            background: #050505;
+            padding: 80px 20px 30px;
+            margin-top: 50px;
+            overflow: hidden;
+            border-top: 2px solid var(--primary);
+            box-shadow: 0 -15px 50px rgba(0, 242, 234, 0.1);
         }
-        .chat-container {
-            width: 100%; background: rgba(8, 9, 14, 0.95); border: 1px solid rgba(0, 242, 234, 0.2); border-radius: 12px; overflow: hidden;
-            display: flex; flex-direction: column; height: 480px; box-shadow: 0 0 30px rgba(0, 242, 234, 0.05); position: relative;
+        
+        .footer-grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(112, 0, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(112, 0, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            opacity: 0.5;
         }
-        .chat-header { padding: 15px; background: linear-gradient(90deg, rgba(0, 242, 234, 0.05), rgba(0,0,0,0.8)); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
-        .chat-title { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #fff; }
-        .chat-icon-spin { color: var(--primary); animation: atomSpin 10s linear infinite; }
-        .status-badge { font-size: 0.65rem; padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(0, 255, 0, 0.3); color: #00ff00; display: flex; gap: 6px; align-items: center; }
-        .status-dot-pulse { width: 6px; height: 6px; background: #00ff00; border-radius: 50%; animation: blink 1.5s infinite; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; text-align: left; }
-        .message { max-width: 90%; padding: 12px; border-radius: 8px; font-size: 0.9rem; line-height: 1.5; }
-        .message.ai { align-self: flex-start; background: rgba(255, 255, 255, 0.03); border-left: 2px solid var(--primary); color: #ddd; }
-        .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--secondary), #5e1ec2); color: #fff; }
-        .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; gap: 10px; background: rgba(0,0,0,0.4); }
-        .chat-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 6px; color: #fff; font-size: 0.9rem; outline: none; }
-        .chat-send-btn { background: var(--primary); color: #000; border: none; padding: 0 15px; border-radius: 6px; font-size: 1.2rem; }
 
-        /* --- FOOTER 3D --- */
-        footer {
-            width: 100%; background: #050505; padding: 60px 20px 30px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; align-items: center; box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+        .footer-content-3d {
+            position: relative; z-index: 2;
+            max-width: 1000px; margin: 0 auto;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
         }
-        .footer-content { width: 100%; display: flex; flex-direction: column; gap: 40px; margin-bottom: 40px; text-align: center; }
-        .footer-links li { margin-bottom: 12px; list-style: none; }
-        .footer-links a { text-decoration: none; color: var(--text-muted); font-size: 1rem; display: block; padding: 5px; }
-        .social-icons { display: flex; gap: 20px; margin: 25px auto; justify-content: center; }
-        .social-btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #fff; border: 1px solid rgba(255,255,255,0.1); font-size: 1.3rem; }
-        .copyright { font-size: 0.75rem; color: var(--text-muted); text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; width: 100%; }
+
+        .limitless-box {
+            background: linear-gradient(135deg, rgba(13, 14, 20, 0.95), rgba(0,0,0,0.95));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 242, 234, 0.05);
+            padding: 40px; border-radius: 20px;
+            margin-bottom: 50px; width: 100%;
+            transform: translateY(-40px);
+            backdrop-filter: blur(10px);
+        }
+
+        .limitless-title {
+            font-family: 'Orbitron'; color: #fff; font-size: 1.5rem;
+            margin-bottom: 15px; text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+        }
+
+        .limitless-text {
+            font-size: 1.1rem; color: #ccc; line-height: 1.6; margin-bottom: 20px;
+        }
+        
+        .highlight-phrase {
+            color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            display: block; margin-top: 10px; font-size: 1.2rem;
+            text-shadow: 0 0 15px var(--primary);
+        }
+
+        .footer-cols {
+            display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; width: 100%;
+            margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 30px;
+        }
+        .f-col { flex: 1; min-width: 200px; text-align: center; }
+        .f-col h4 { color: var(--text-main); font-family: 'Orbitron'; margin-bottom: 20px; font-size: 1.1rem; }
+        .f-links li { list-style: none; margin-bottom: 10px; }
+        .f-links a { text-decoration: none; color: var(--text-muted); transition: 0.3s; font-size: 0.95rem; }
+        .f-links a:hover { color: var(--primary); padding-left: 5px; text-shadow: 0 0 8px var(--primary); }
+        
+        .social-row { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
+        .s-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); color: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; text-decoration: none; }
+        .s-btn:hover { background: var(--secondary); border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.4); }
+
+        .copyright-bar { width: 100%; text-align: center; font-size: 0.8rem; color: #555; font-family: 'Orbitron'; letter-spacing: 1px; }
 
         @keyframes gradientFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes atomSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes blink { 50% { opacity: 0.5; } }
-        @media (min-width: 768px) { .specs-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 768px) { .specs-grid { grid-template-columns: 1fr 1fr; } .limitless-box { transform: translateY(-60px); } }
     </style>
 </head>
 <body>
@@ -711,85 +747,22 @@
 
     </div>
 
-    <section class="ai-section">
-        <div class="section-title-bar">
-            <h2>ASISTENTE <span style="color:var(--primary)">VIRTUAL</span></h2>
-            <p>POWERED BY LEVIATHAM AI</p>
-        </div>
-
-        <div class="chat-container">
-            <div class="chat-header">
-                <div class="chat-title">
-                    <i class="fa-solid fa-atom chat-icon-spin"></i>
-                    LEVIATHAM CORE IA
+    <footer class="footer-3d-wrapper">
+        <div class="footer-grid-bg"></div>
+        
+        <div class="footer-content-3d">
+            <div class="limitless-box">
+                <div class="limitless-title">
+                    <i class="fa-solid fa-brain fa-xl" style="color:var(--primary);"></i>
+                    DESARROLLO SIN LÍMITES
                 </div>
-                <div class="status-badge">
-                    <div class="status-dot-pulse"></div>
-                    SYSTEM ONLINE
-                </div>
+                <p class="limitless-text">
+                    "No nos limitamos a los 7 protocolos expuestos arriba." <br>
+                    <span class="highlight-phrase">SI PUEDES IMAGINARLO, PODEMOS PROGRAMARLO.</span>
+                </p>
+                <p style="font-size:0.9rem; color:var(--text-muted);">
+                </p>
             </div>
-
-            <div class="chat-messages" id="chat-box">
-                <div class="message ai">
-                    Hola. Soy la IA de Leviatham Core. Estoy conectada a la red neuronal de la agencia. Puedo guiarte sobre desarrollo web, precios, tienda digital y soporte. ¿En qué te ayudo?
-                </div>
-            </div>
-
-            <div class="chat-input-area">
-                <input type="text" id="user-input" class="chat-input" placeholder="Escribe tu consulta aquí..." autocomplete="off">
-                <button id="send-btn" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo-col">
-                <div class="logo" style="font-size: 1.8rem; margin-bottom:15px;">
-                    <i class="fa-solid fa-cube fa-lg"></i>
-                    <span class="logo-text">Leviatham</span>
-                </div>
-                <p>Agencia especializada en desarrollo web de alto rendimiento, ciberseguridad aplicada e Inteligencia Artificial.</p>
-            </div>
-
-            <div class="footer-col">
-                <h4 class="footer-title">Navegación Rápida</h4>
-                <ul class="footer-links">
-                    <li><a href="desarrollo.html">Desarrollo Web</a></li>
-                    <li><a href="tienda.html">Tienda</a></li>
-                    <li><a href="portafolio.html">Nuestro Portafolio</a></li>
-                    <li><a href="cotizador.html">Cotizar Proyecto</a></li>
-                    <li><a href="soportegeneral.html">Centro de Soporte</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4 class="footer-title">Contacto Directo</h4>
-                <div class="social-icons">
-                    <a href="https://wa.me/5491100000000" target="_blank" class="social-btn wa"><i class="fa-brands fa-whatsapp fa-lg"></i></a>
-                    <a href="https://t.me/USUARIO" target="_blank" class="social-btn tg"><i class="fa-brands fa-telegram fa-lg"></i></a>
-                    <a href="mailto:contacto@leviathamcore.com" class="social-btn gm"><i class="fa-regular fa-envelope fa-lg"></i></a>
-                </div>
-
-                <a href="terminos.html" class="btn-terms">Términos y Condiciones</a>
-
-                <div class="tech-clock">
-                    <i class="fa-regular fa-clock"></i>
-                    <span>Lun - Sab: 09:00 - 18:00</span>
-                    <div class="dot" title="Estamos Online"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="copyright">
-            <p>&copy; 2025 LEVIATHAM CORE IA. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
     <script>
         // HEADER
         const headerTrigger = document.getElementById('header-trigger');
@@ -801,70 +774,7 @@
                 headerTrigger.classList.toggle('open');
             }
         });
-
-        // CHAT IA
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        let conversationHistory = [];
-
-        const systemPrompt = `
-            Actúa como LEVIATHAM CORE IA, el Asistente Virtual Corporativo de la agencia "Leviatham Core".
-            TU OBJETIVO: Asistir al usuario con información precisa sobre servicios de desarrollo web, precios y soporte técnico.
-            TONO: Serio, técnico, eficiente y educado.
-            IDIOMA: Español.
-        `;
-
-        async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'user');
-            userInput.value = '';
-            userInput.disabled = true;
-            sendBtn.disabled = true;
-            conversationHistory.push(`Usuario: ${text}`);
-
-            const loadingMsg = document.createElement('div');
-            loadingMsg.className = 'message ai';
-            loadingMsg.innerHTML = 'Procesando...<span style="animation:blink 1s infinite">...</span>';
-            loadingMsg.id = 'loading-msg';
-            chatBox.appendChild(loadingMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                const historyText = conversationHistory.join('\n');
-                const finalPrompt = `${systemPrompt}\n\nHistorial:\n${historyText}\n\nAsistente:`;
-                const encodedPrompt = encodeURIComponent(finalPrompt);
-                const response = await fetch(`https://text.pollinations.ai/${encodedPrompt}`);
-                if (!response.ok) throw new Error('API Error');
-                const data = await response.text();
-                
-                document.getElementById('loading-msg').remove();
-                addMessage(data, 'ai');
-                conversationHistory.push(`Asistente: ${data}`);
-            } catch (error) {
-                document.getElementById('loading-msg').remove();
-                addMessage("Error de conexión.", 'error');
-            } finally {
-                userInput.disabled = false;
-                sendBtn.disabled = false;
-                userInput.focus();
-            }
-        }
-
-        function addMessage(text, sender) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${sender}`;
-            msgDiv.innerHTML = text;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        // SCRIPT DE CHAT ELIMINADO POR PETICIÓN DEL USUARIO
     </script>
 </body>
 </html>
