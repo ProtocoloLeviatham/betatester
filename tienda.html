@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tienda de Arquitecturas | Leviatham Core</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2881/2881142.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #020203;
+            --primary: #00f2ea;
+            --secondary: #7000ff;
+            --gold: #ffd700;
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --card-bg: rgba(13, 14, 20, 0.95);
+            --border-neon: 1px solid rgba(0, 242, 234, 0.3);
+            --green: #00ff88;
+            --red: #ff3333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* --- FONDO ANIMADO --- */
+        .cyber-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(180deg, #020203 10%, #0a0514 100%);
+        }
+        .cyber-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(0, 242, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 234, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite; opacity: 0.6;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
+
+        h1, h2, h3, h4, .price-new, .sticker, .info-title, .logo-text, .menu-label, .prod-title, .faq-question, .niche-title { font-family: 'Orbitron', sans-serif; }
+
+        /* --- HEADER MÓVIL --- */
+        header {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; z-index: 5000; padding: 12px 15px;
+            background: rgba(8, 9, 14, 0.98); backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 242, 234, 0.3); border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s ease;
+        }
+        .header-trigger { width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .logo i { color: var(--primary); font-size: 1.2rem; }
+        .menu-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 8px; animation: pulseGold 2s infinite; }
+        .menu-arrow { transition: transform 0.4s ease; }
+        header.open .menu-arrow { transform: rotate(180deg); }
+        nav { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        nav.active { max-height: 500px; opacity: 1; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        nav ul { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0; }
+        nav a { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
+        nav a:hover { background: rgba(0, 242, 234, 0.1); color: #fff; border-color: var(--primary); }
+        .cta-menu { background: linear-gradient(135deg, var(--secondary), #4a00e0) !important; color: #fff !important; font-weight: 700 !important; }
+        @keyframes pulseGold { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); } 100% { opacity: 0.8; } }
+
+        /* --- HERO TIENDA (PULIDO) --- */
+        .main-container { width: 100%; padding: 0 15px; display: flex; flex-direction: column; align-items: center; }
+        
+        .hero-store { text-align: center; margin-top: 150px; margin-bottom: 70px; position: relative; }
+        .hero-store::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: var(--primary); filter: blur(150px); opacity: 0.15; z-index: -1; }
+        
+        .hero-store h1 { 
+            font-size: 2.5rem; line-height: 1.1; margin-bottom: 25px; text-transform: uppercase; 
+            background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        
+        .hero-store p { 
+            color: #ddd; font-size: 1rem; line-height: 1.7; max-width: 850px; margin: 0 auto; letter-spacing: 0.5px;
+            background: rgba(10, 11, 16, 0.6); padding: 20px; border-radius: 12px; border-left: 3px solid var(--secondary);
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- GRID PRODUCTOS --- */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; width: 100%; max-width: 1200px; margin-bottom: 100px; }
+
+        /* --- TARJETA 3D PRODUCTO (MEJORADA) --- */
+        .product-card {
+            background: var(--card-bg); border: 1px solid rgba(0, 242, 234, 0.15); border-radius: 20px;
+            position: relative; overflow: hidden; transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
+            transform-style: preserve-3d;
+        }
+        .product-card:hover { transform: translateY(-10px) scale(1.01); border-color: var(--primary); box-shadow: 0 0 30px rgba(0, 242, 234, 0.1); }
+
+        .card-image {
+            width: 100%; height: 220px; background-color: #0f0f0f;
+            background-size: cover; background-position: center; position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .img-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, #0a0b10 10%, transparent 100%); }
+
+        .sticker {
+            position: absolute; top: 20px; right: -40px; background: linear-gradient(90deg, #ffd700, #ffaa00);
+            color: #000; font-weight: 900; font-size: 0.8rem; padding: 8px 50px;
+            transform: rotate(45deg); box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 10; letter-spacing: 1px;
+        }
+
+        .card-body { padding: 30px 25px; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .prod-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .prod-title { font-size: 1.4rem; color: #fff; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .prod-niche { font-size: 0.7rem; color: var(--secondary); font-weight: 800; border: 1px solid var(--secondary); padding: 4px 10px; border-radius: 50px; text-transform: uppercase; white-space: nowrap; }
+
+        /* Tabla Specs Profesional */
+        .specs-table { width: 100%; font-size: 0.85rem; margin-bottom: 25px; border-collapse: separate; border-spacing: 0 8px; }
+        .specs-table td { padding: 0; }
+        .spec-label { color: var(--text-muted); font-weight: 500; }
+        .spec-value { text-align: right; font-weight: 700; color: #fff; }
+        .val-yes { color: var(--green); text-shadow: 0 0 5px rgba(0,255,136,0.3); }
+        .val-no { color: var(--red); opacity: 0.7; }
+
+        /* Tactical Features (5 puntos) */
+        .tactical-box { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 3px solid var(--primary); }
+        .tactical-title { color: var(--primary); font-size: 0.85rem; font-weight: 800; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .tactical-list { list-style: none; padding: 0; margin: 0; }
+        .tactical-list li { font-size: 0.9rem; color: #ccc; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4; }
+        .tactical-list li i { color: var(--gold); font-size: 0.8rem; margin-top: 4px; }
+
+        /* Core Compatibility */
+        .core-comp { margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .comp-item { 
+            display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); 
+            padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; color: #fff; border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .comp-item i { color: var(--secondary); }
+
+        /* Precios Mejorados */
+        .price-area { 
+            text-align: center; margin-bottom: 25px; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05)); 
+            padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .price-row { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .price-old { text-decoration: line-through; color: #666; font-size: 1rem; font-weight: 500; }
+        .price-new { color: var(--gold); font-size: 1.8rem; font-weight: 900; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .price-ars { color: var(--text-muted); font-size: 0.9rem; font-weight: 400; opacity: 0.8; letter-spacing: 0.5px; }
+
+        /* Botones */
+        .card-actions { display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px; margin-top: auto; }
+        .btn-demo {
+            padding: 14px; text-align: center; border: 1px solid var(--text-muted); color: var(--text-muted);
+            text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase;
+        }
+        .btn-demo:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+        
+        .btn-buy {
+            padding: 14px; text-align: center; background: var(--primary); color: #000;
+            text-decoration: none; border-radius: 8px; font-size: 0.9rem; font-weight: 800; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px; border: none; text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 242, 234, 0.3);
+        }
+        .btn-buy:hover { background: #fff; box-shadow: 0 0 25px var(--primary); transform: scale(1.02); }
+
+        /* TARJETA DORADA (INSPIRACION) */
+        .gold-card { border-color: var(--gold); box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); background: linear-gradient(145deg, #1a1500, #000); }
+        .gold-card .prod-title { color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .gold-card .tactical-box { border-left-color: var(--gold); }
+        .gold-card .btn-buy { background: var(--gold); color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .gold-card .btn-buy:hover { background: #fff; box-shadow: 0 0 30px var(--gold); }
+
+        /* --- INFO SECTION (A TENER EN CUENTA) --- */
+        .info-section { width: 100%; max-width: 1200px; margin-top: 50px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.2rem; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
+        .section-header p { color: var(--primary); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        .info-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.3));
+            border-left: 4px solid var(--secondary); padding: 30px; border-radius: 16px;
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .info-card:hover { transform: translateY(-5px); border-left-color: var(--primary); }
+        
+        .info-icon { font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; display: block; }
+        .info-title { font-size: 1.2rem; color: #fff; margin-bottom: 15px; text-transform: uppercase; }
+        .info-text { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 15px; }
+        .info-price { color: var(--primary); font-weight: 800; display: block; margin-top: auto; font-size: 0.9rem; letter-spacing: 1px; }
+
+        /* --- FAQ SECTION ESTILO --- */
+        .faq-section { width: 100%; max-width: 800px; margin: 100px auto 50px; }
+        .faq-item { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(255,255,255,0.02); overflow: hidden; transition: 0.3s; }
+        .faq-item:hover { border-color: var(--primary); }
+        .faq-question { width: 100%; text-align: left; padding: 20px; background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .faq-question i { color: var(--primary); transition: 0.3s; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); background: rgba(0,0,0,0.3); }
+        .faq-answer p { padding: 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); }
+        .faq-item.active .faq-answer { max-height: 200px; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--gold); }
+
+        /* --- NICHO REQUEST SECTION --- */
+        .niche-section { width: 100%; max-width: 800px; margin: 50px auto 100px; padding: 40px; background: linear-gradient(135deg, rgba(13, 14, 20, 0.95), rgba(20, 10, 30, 0.9)); border: 1px solid var(--secondary); border-radius: 20px; text-align: center; box-shadow: 0 0 30px rgba(112, 0, 255, 0.15); position: relative; overflow: hidden; }
+        .niche-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, var(--secondary), var(--primary)); }
+        .niche-title { font-size: 1.8rem; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .niche-text { color: #ccc; margin-bottom: 30px; font-size: 0.95rem; }
+        .niche-form { display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin: 0 auto; }
+        .niche-input { padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: 0.3s; }
+        .niche-input:focus { border-color: var(--secondary); box-shadow: 0 0 10px rgba(112, 0, 255, 0.2); }
+        .niche-btn { padding: 15px; background: var(--secondary); color: #fff; border: none; border-radius: 8px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; }
+        .niche-btn:hover { background: #fff; color: var(--secondary); box-shadow: 0 0 20px var(--secondary); }
+
+        /* --- WHATSAPP --- */
+        .whatsapp-float {
+            position: fixed; bottom: 20px; right: 20px; width: 65px; height: 65px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 32px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 5000; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; animation: pulseWA 2s infinite;
+        }
+        @keyframes pulseWA { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-background"><div class="cyber-grid"></div></div>
+
+    <a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+
+    <header id="header-trigger">
+        <div class="header-trigger">
+            <div class="logo">
+                <i class="fa-solid fa-layer-group"></i>
+                <span class="logo-text">Leviatham</span>
+            </div>
+            <div class="menu-label">MENÚ PRINCIPAL [ TOCAR ] <i class="fa-solid fa-chevron-down menu-arrow"></i></div>
+        </div>
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="index.html"><i class="fa-solid fa-house-signal"></i> Inicio</a></li>
+                <li><a href="desarrollo.html"><i class="fa-solid fa-laptop-code"></i> Desarrollo</a></li>
+                <li><a href="tienda.html" style="color:var(--primary); border-color:var(--primary);"><i class="fa-solid fa-cart-shopping"></i> Tienda</a></li>
+                <li><a href="portafolio.html"><i class="fa-solid fa-eye"></i> Portafolio</a></li>
+                <li><a href="infraestructura.html"><i class="fa-solid fa-network-wired"></i> Infraestructura</a></li>
+                <li><a href="soportegeneral.html"><i class="fa-solid fa-headset"></i> Soporte</a></li>
+                <li><a href="cotizador.html" class="cta-menu"><i class="fa-solid fa-bolt"></i> Cotizar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+
+        <div class="hero-store">
+            <h1>Arquitecturas Web <br><span style="color:var(--primary)">Pre-Diseñadas</span></h1>
+            <p><strong>Elige tu plantilla, envía tu logo e información y ten lista tu página profesional en tiempo récord.</strong><br>
+            Nuestras arquitecturas no son simples temas; son estructuras de código optimizado, diseñadas por ingenieros de Leviatham Core para garantizar velocidad, SEO y conversión desde el primer día.</p>
+        </div>
+
+        <div class="products-grid">
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda1.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">GASTRO PRIME</h3><span class="prod-niche">GASTRONOMÍA</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">8</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Menú QR Digital Autogestionable.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Reservas directas a WhatsApp API.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Modo Oscuro automático (Ambiente).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Galería de Platos Instagram-Like.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Mapa de Ubicación Inteligente.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> iOS/Android</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Restaurant</div><div class="comp-item"><i class="fa-solid fa-globe"></i> SEO Local</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda2.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">LEX CORP</h3><span class="prod-niche">LEGAL</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">6</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Sistema de Citas Online.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Blog SEO Jurídico integrado.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Perfiles de Equipo (Staff).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Áreas de Práctica detalladas.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Descarga de documentos PDF.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Responsive</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Legal</div><div class="comp-item"><i class="fa-solid fa-globe"></i> Fast Load</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda3.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">SHOPIFY KILLER</h3><span class="prod-niche">E-COMMERCE</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">12</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">TOTAL</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-yes">RECOMENDADOR</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">CATÁLOGO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Carrito Ajax (Sin recarga).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Pagos Crypto & Tarjetas.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Filtros avanzados de producto.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Recuperación de carritos.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Panel de control de Stock.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> App-Like</div><div class="comp-item"><i class="fa-brands fa-google"></i> Product Schema</div><div class="comp-item"><i class="fa-solid fa-globe"></i> Secure</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda4.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">ESTATE PRO</h3><span class="prod-niche">INMOBILIARIA</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">10</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-yes">MAPS API</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Mapas Interactivos Google.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Filtros (Zona/Precio/Amb).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Galerías 4K Deslizables.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Fichas PDF automáticas.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Calculadora Hipotecaria.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema RealEstate</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda5.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">MED CARE</h3><span class="prod-niche">SALUD</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">7</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Portal de Pacientes Seguro.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Agenda de Turnos Médicos.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Fichas de Especialistas.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Blog de Salud verificado.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Ubicación de clínicas.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Medical</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda6.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">EDU MASTER</h3><span class="prod-niche">EDUCACIÓN</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">15</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ (LMS)</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Área de Alumnos Privada.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Sistema de Exámenes Auto.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Venta de Cursos Online.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Certificados PDF.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Video Anti-descarga.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Course</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda7.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">CREATIVO X</h3><span class="prod-niche">PORTAFOLIO</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">5</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Galería Masonry Dinámica.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Animaciones Scroll (AOS).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Contacto Flotante.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Video Backgrounds.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Filtros de Proyectos.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Person</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda8.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">FIT POWER</h3><span class="prod-niche">FITNESS</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">7</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Reserva de Clases Online.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Calculadora IMC integrada.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Venta de Planes/Membresía.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Perfiles de Entrenadores.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Blog de Nutrición.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Gym</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda9.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">NEWS VIRAL</h3><span class="prod-niche">BLOG/NOTICIAS</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">8</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-yes">RELACIONADOS</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">ADSENSE READY</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Espacios Publicitarios.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Optimización Google News.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Carga Diferida (Lazy Load).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Gestión de Autores.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Botones Virales.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> AMP Ready</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema News</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda10.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">SAAS START</h3><span class="prod-niche">TECNOLOGÍA</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">6</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Tablas de Precios (Pricing).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Integración Stripe API.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Documentación / Wiki.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Sección de Features 3D.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Login de Usuarios.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Software</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda11.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">GLOW STUDIO</h3><span class="prod-niche">BELLEZA</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">7</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Agenda de Turnos Visual.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Catálogo de Servicios con Precios.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Galería de Antes/Después.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Venta de Gift Cards.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Tienda de Productos integrada.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Local</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda12.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">ICON BRAND</h3><span class="prod-niche">PERSONAL</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">5</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Linktree Personalizado.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Feed de Instagram/TikTok.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Kit de Prensa Descargable.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Formulario de Contratación.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Venta de Merch simple.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Person</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda13.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">TRAVEL X</h3><span class="prod-niche">TURISMO</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">8</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Motor de Reservas (Booking).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Mapas de Destinos.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Itinerarios por día interactivos.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Precios por Temporada.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Reseñas de viajeros (TripAdvisor).</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Travel</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="sticker">50% OFF</div>
+                <div class="card-image" style="background-image: url('tienda14.png');"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title">MOTOR ELITE</h3><span class="prod-niche">AUTOMOTOR</span></div>
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Módulos:</td><td class="spec-value">8</td></tr>
+                        <tr><td class="spec-label">Auto-Admin:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">HTTPS:</td><td class="spec-value val-yes">SÍ</td></tr>
+                        <tr><td class="spec-label">IA:</td><td class="spec-value val-no">NO</td></tr>
+                        <tr><td class="spec-label">ADS:</td><td class="spec-value val-no">NO</td></tr>
+                    </table>
+                    <div class="tactical-box">
+                        <span class="tactical-title">CARACTERÍSTICAS TÁCTICAS</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Inventario de Vehículos.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Filtros (Año, Km, Marca).</li>
+                            <li><i class="fa-solid fa-bolt"></i> Ficha Técnica detallada.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Calculadora de Financiación.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Formulario Test Drive.</li>
+                        </ul>
+                    </div>
+                    <div class="core-comp"><div class="comp-item"><i class="fa-solid fa-mobile"></i> Native</div><div class="comp-item"><i class="fa-brands fa-google"></i> Schema Car</div></div>
+                    <div class="price-area">
+                        <div class="price-row"><span class="price-old">$500 USD</span><span class="price-new">$250 USD</span></div>
+                        <div class="price-ars">(≈ $300.000 ARS)</div>
+                    </div>
+                    <div class="card-actions"><a href="#" class="btn-demo"><i class="fa-regular fa-eye"></i> Demo</a><a href="https://wa.me/1234567890" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Licencia</a></div>
+                </div>
+            </div>
+
+            <div class="product-card gold-card">
+                <div class="card-image" style="background-image: url('tienda15.png'); box-shadow: 0 0 20px var(--gold);"><div class="img-overlay"></div></div>
+                <div class="card-body">
+                    <div class="prod-header"><h3 class="prod-title" style="color:var(--gold)">REPLICA GOLD</h3><span class="prod-niche" style="border-color:var(--gold); color:var(--gold)">A MEDIDA</span></div>
+                    <p style="color:#fff; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">
+                        ¿Viste una web que te encantó? Envíanos el link. Nuestro equipo de ingeniería inversa analizará su estructura y creará una versión superior, optimizada y personalizada para tu marca.
+                    </p>
+                    <div class="tactical-box" style="border-left-color:var(--gold);">
+                        <span class="tactical-title" style="color:var(--gold)">PROCESO DE CLONADO MEJORADO</span>
+                        <ul class="tactical-list">
+                            <li><i class="fa-solid fa-bolt"></i> Análisis de Código Fuente.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Mejora de Velocidad y SEO.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Adaptación a tu Branding.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Implementación de funciones extra.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Eliminación de código basura.</li>
+                        </ul>
+                    </div>
+                    <div class="price-area" style="background: rgba(255,215,0,0.1); border-color:var(--gold);"><span class="price-new" style="color:var(--gold)">COTIZAR AHORA</span></div>
+                    <a href="https://wa.me/1234567890?text=Quiero%20replicar%20una%20web" class="btn-buy" style="background:var(--gold); color:#000; width:100%;">ENVIAR REFERENCIA</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="faq-section">
+            <div class="section-header">
+                <h2>Preguntas Tácticas</h2>
+                <p>FAQ DE OPERACIONES</p>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question">¿REQUIEREN CONOCIMIENTOS DE PROGRAMACIÓN? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>No para el uso diario. Todas las arquitecturas incluyen un panel visual o CMS integrado para que puedas gestionar productos, textos e imágenes sin tocar una línea de código.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿ES UN PAGO ÚNICO O MENSUAL? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>El costo de la licencia es ÚNICO y de por vida. No cobramos mensualidades por el uso de la arquitectura. Solo deberás renovar tu hosting y dominio anualmente con tu proveedor de preferencia.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿QUÉ HOSTING NECESITO? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Funcionan en cualquier servidor Linux estándar (cPanel, DirectAdmin) o VPS. Al momento de la compra te enviamos los requisitos técnicos exactos, o podemos recomendarte proveedores aliados de alto rendimiento.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿INCLUYEN EL DOMINIO (.COM)? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>No. Tú eres el dueño legal de tu nombre en internet. Debes comprarlo aparte (aprox. $10-$15 USD anuales), pero nuestro equipo te asiste en la conexión DNS.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿ESTÁN OPTIMIZADAS PARA GOOGLE (SEO)? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Afirmativo. El núcleo del código incluye etiquetas Schema.org, meta-datos dinámicos, sitemaps automáticos y una estructura semántica que Google prioriza sobre las plantillas genéricas.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿PUEDO MIGRAR MI SITIO ACTUAL? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Nosotros instalamos la nueva arquitectura limpia. No realizamos migración masiva de contenido antiguo para evitar "código basura", pero puedes cargar tus datos manualmente en el nuevo sistema optimizado.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿TIEMPOS DE ENTREGA? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Despliegue rápido. Una vez recibimos los accesos a tu servidor y el material base (logo), la instalación técnica se completa en 24 a 48 horas hábiles.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿OFRECEN GARANTÍA TÉCNICA? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Sí. Tienes 30 días de garantía total sobre cualquier error de código o funcionamiento de la plantilla. Cualquier bug reportado en ese periodo se soluciona sin costo.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿MÉTODOS DE PAGO ACEPTADOS? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Aceptamos Transferencia Bancaria Local, Tarjetas de Crédito Internacionales (Visa/Mastercard) y Criptomonedas (USDT/BTC) con descuento especial.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">¿TENGO ACCESO AL CÓDIGO FUENTE? <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Totalmente. No encriptamos el código. Si en el futuro deseas contratar a otro desarrollador para modificar tu web, tendrá acceso total a los archivos fuente.</p></div>
+            </div>
+        </div>
+
+        <div class="niche-section">
+            <h2 class="niche-title">¿No encontraste tu nicho?</h2>
+            <p class="niche-text">Nuestros ingenieros lanzan nuevos módulos cada mes. Dinos qué necesitas y te notificaremos cuando esté listo.</p>
+            <form class="niche-form" action="mailto:AgenciaLeviatham@gmail.com" method="post" enctype="text/plain">
+                <input type="email" class="niche-input" placeholder="Tu Email" required name="email">
+                <input type="text" class="niche-input" placeholder="¿Qué rubro buscas? (Ej: Yoga, Taller Mecánico)" required name="rubro">
+                <button type="submit" class="niche-btn">ENVIAR SOLICITUD</button>
+            </form>
+        </div>
+
+        <div class="info-section">
+            <div class="section-header">
+                <h2>A Tener en Cuenta</h2>
+                <p>TRANSPARENCIA Y CONDICIONES</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-server"></i></div>
+                    <h3 class="info-title">Alojamiento y Dominios</h3>
+                    <p class="info-text">La licencia no incluye hosting ni dominio anual (costos de terceros). Nosotros te asesoramos y configuramos todo en tu propia cuenta para que tengas el control total.</p>
+                    <span class="info-price">CONFIGURACIÓN INCLUIDA</span>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3 class="info-title">Integración de IA</h3>
+                    <p class="info-text">Conectamos APIs de OpenAI o Claude. El costo de desarrollo parte de una base y escala según la complejidad (Chatbot simple vs Análisis de datos).</p>
+                    <span class="info-price">DESDE $10 - $50 USD / MES</span>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3 class="info-title">Soporte y Garantía</h3>
+                    <p class="info-text">Todas las plantillas tienen garantía de funcionamiento de 30 días. Cualquier error de código nuestro se repara sin costo. Soporte extendido disponible.</p>
+                    <span class="info-price">GARANTÍA 30 DÍAS GRATIS</span>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3 class="info-title">Escalabilidad Futura</h3>
+                    <p class="info-text">Nuestras arquitecturas son modulares. Si tu negocio crece, puedes agregar nuevas funciones (Apps, CRM, más idiomas) pagando solo por el módulo extra.</p>
+                    <span class="info-price">COSTO POR MÓDULO</span>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h3 class="info-title">Seguridad y Backups</h3>
+                    <p class="info-text">Entregamos el sitio limpio y seguro. Recomendamos planes de mantenimiento para actualizaciones de seguridad y copias de respaldo automáticas mensuales.</p>
+                    <span class="info-price">OPCIONAL MENSUAL</span>
+                </div>
+            </div>
+        </div>
+
+    </div> <script>
+        // HEADER LOGIC
+        const headerTrigger = document.getElementById('header-trigger');
+        const navMenu = document.getElementById('nav-menu');
+        const header = document.querySelector('header');
+
+        headerTrigger.addEventListener('click', (e) => {
+            if (!e.target.closest('a')) {
+                navMenu.classList.toggle('active');
+                header.classList.toggle('open');
+            }
+        });
+
+        // FAQ LOGIC
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Cerrar otros
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // Toggle actual
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
