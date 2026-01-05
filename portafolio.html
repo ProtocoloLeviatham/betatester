@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portafolio | Leviatham Core</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2881/2881142.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #020203;
+            --primary: #00f2ea;
+            --secondary: #7000ff;
+            --gold: #ffd700;
+            --green: #00ff88;
+            --red: #ff3333;
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --card-bg: rgba(13, 14, 20, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .cyber-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(180deg, #020203 10%, #0a0514 100%);
+        }
+        .cyber-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(0, 242, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 234, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite; opacity: 0.6;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
+
+        h1, h2, h3, h4, .protocol-title, .phase-title, .faq-header h2 { font-family: 'Orbitron', sans-serif; }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; z-index: 5000; padding: 12px 15px;
+            background: rgba(8, 9, 14, 0.98); backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 242, 234, 0.3); border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s ease;
+        }
+        .header-trigger { width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .logo i { color: var(--primary); font-size: 1.2rem; }
+        .menu-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 8px; animation: pulseGold 2s infinite; }
+        .menu-arrow { transition: transform 0.4s ease; }
+        header.open .menu-arrow { transform: rotate(180deg); }
+        nav { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        nav.active { max-height: 500px; opacity: 1; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        nav ul { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0; }
+        nav a { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
+        nav a:hover { background: rgba(0, 242, 234, 0.1); color: #fff; border-color: var(--primary); }
+        .cta-menu { background: linear-gradient(135deg, var(--secondary), #4a00e0) !important; color: #fff !important; font-weight: 700 !important; }
+        @keyframes pulseGold { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); } 100% { opacity: 0.8; } }
+
+        .main-container { width: 100%; padding: 0 15px; display: flex; flex-direction: column; align-items: center; }
+
+        /* HERO */
+        .hero-portfolio { text-align: center; margin-top: 150px; margin-bottom: 80px; position: relative; }
+        .hero-portfolio h1 { font-size: 2.2rem; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; background: linear-gradient(90deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 5px 20px rgba(0,0,0,0.8); }
+        .hero-portfolio p { color: var(--primary); font-size: 0.95rem; line-height: 1.7; max-width: 800px; margin: 0 auto; letter-spacing: 0.5px; background: rgba(10, 11, 16, 0.7); padding: 25px; border-radius: 12px; border-left: 3px solid var(--gold); backdrop-filter: blur(5px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+
+        /* GRID PROYECTOS */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; width: 100%; max-width: 1200px; margin-bottom: 100px; }
+
+        /* TARJETA 3D */
+        .project-card {
+            background: var(--card-bg); border: 1px solid rgba(0, 242, 234, 0.15); border-radius: 20px;
+            position: relative; overflow: hidden; transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
+            transform-style: preserve-3d; min-height: 520px;
+        }
+        .project-card:hover { transform: translateY(-10px) scale(1.01); border-color: var(--primary); box-shadow: 0 0 30px rgba(0, 242, 234, 0.2); }
+
+        .leviatham-seal {
+            position: absolute; top: 15px; right: 15px; width: 50px; height: 50px;
+            border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            opacity: 0.9; animation: rotateSeal 20s linear infinite; z-index: 10;
+            background: rgba(0,0,0,0.8); box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+        .seal-inner { font-size: 0.5rem; color: var(--gold); text-align: center; font-weight: 800; letter-spacing: 1px; }
+        @keyframes rotateSeal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .card-body { padding: 35px 25px; flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 2; }
+
+        .project-header { margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; display: flex; gap: 15px; align-items: center; }
+        .project-icon { font-size: 2rem; color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .project-title { font-size: 1.4rem; color: #fff; margin: 0; text-transform: uppercase; }
+        .project-desc { font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 5px; }
+
+        .tech-bio { 
+            background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; margin-bottom: 25px; 
+            border-left: 2px solid var(--secondary); font-size: 0.85rem; color: #ccc; line-height: 1.6;
+        }
+        
+        .data-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .data-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .data-label { color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .val-yes { color: var(--green); font-weight: 800; }
+        .val-no { color: var(--red); font-weight: 800; }
+        .val-norm { color: #fff; font-weight: 800; }
+
+        .project-btn {
+            margin-top: auto; padding: 15px; text-align: center; background: transparent; 
+            border: 1px solid var(--primary); color: var(--primary); border-radius: 8px; 
+            font-size: 0.9rem; font-weight: 800; transition: 0.3s; 
+            text-transform: uppercase; letter-spacing: 2px; text-decoration: none;
+            font-family: 'Orbitron'; display: block;
+        }
+        .project-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 25px var(--primary); }
+
+        /* --- SECCIÓN WORKFLOW (PROTOCOLO) --- */
+        .workflow-section { width: 100%; max-width: 900px; margin-bottom: 100px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2rem; color: #fff; text-transform: uppercase; text-shadow: 0 0 20px rgba(112, 0, 255, 0.5); }
+        .section-header p { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
+
+        .timeline-container { position: relative; padding: 20px 0; }
+        .timeline-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), var(--secondary), var(--gold)); border-radius: 2px; }
+        
+        .timeline-step { position: relative; padding-left: 60px; margin-bottom: 40px; }
+        .step-marker {
+            position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%;
+            background: #000; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #fff; z-index: 2; box-shadow: 0 0 15px rgba(0, 242, 234, 0.3);
+        }
+        .step-content {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2));
+            padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+        }
+        .phase-title { color: var(--primary); font-size: 1.1rem; margin-bottom: 5px; letter-spacing: 1px; }
+        .phase-desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
+
+        /* Colores únicos por fase */
+        .step-2 .step-marker { border-color: var(--secondary); box-shadow: 0 0 15px rgba(112, 0, 255, 0.3); }
+        .step-2 .phase-title { color: var(--secondary); }
+        
+        .step-3 .step-marker { border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        .step-3 .phase-title { color: #fff; }
+
+        .step-4 .step-marker { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 51, 51, 0.3); }
+        .step-4 .phase-title { color: var(--red); }
+
+        .step-5 .step-marker { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+        .step-5 .phase-title { color: var(--gold); }
+
+        /* --- FAQ SECTION --- */
+        .faq-section { width: 100%; max-width: 800px; margin-bottom: 50px; }
+        .faq-header { text-align: center; margin-bottom: 30px; }
+        .faq-header h2 { color: #fff; font-size: 1.8rem; text-transform: uppercase; }
+        
+        .faq-item {
+            background: rgba(15, 16, 22, 0.9); margin-bottom: 12px;
+            border: 1px solid rgba(0, 242, 234, 0.1); border-radius: 8px; overflow: hidden;
+        }
+        .faq-item[open] { border-color: var(--primary); background: rgba(0, 242, 234, 0.05); }
+        
+        summary {
+            padding: 18px 25px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.95rem; color: #fff; list-style: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; color: var(--primary); font-size: 1.2rem; font-weight: bold; }
+        .faq-item[open] summary::after { content: '-'; color: var(--secondary); }
+        
+        .faq-ans { padding: 0 25px 25px; color: #aaa; font-size: 0.9rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
+
+        .copyright { text-align: center; font-size: 0.75rem; color: #555; margin-top: 50px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-background"><div class="cyber-grid"></div></div>
+
+    <header id="header-trigger">
+        <div class="header-trigger">
+            <div class="logo"><i class="fa-solid fa-layer-group"></i><span class="logo-text">Leviatham</span></div>
+            <div class="menu-label">MENÚ PRINCIPAL [ TOCAR ] <i class="fa-solid fa-chevron-down menu-arrow"></i></div>
+        </div>
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="index.html"><i class="fa-solid fa-house-signal"></i> Inicio</a></li>
+                <li><a href="desarrollo.html"><i class="fa-solid fa-laptop-code"></i> Desarrollo</a></li>
+                <li><a href="tienda.html"><i class="fa-solid fa-cart-shopping"></i> Tienda</a></li>
+                <li><a href="portafolio.html" style="color:var(--primary); border-color:var(--primary);"><i class="fa-solid fa-eye"></i> Portafolio</a></li>
+                <li><a href="infraestructura.html"><i class="fa-solid fa-network-wired"></i> Infraestructura</a></li>
+                <li><a href="soportegeneral.html"><i class="fa-solid fa-headset"></i> Soporte</a></li>
+                <li><a href="cotizador.html" class="cta-menu"><i class="fa-solid fa-bolt"></i> Cotizar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+
+        <div class="hero-portfolio">
+            <h1>Casos de Estudio & <br><span style="color:var(--secondary)">Arquitectura Digital</span></h1>
+            <p>Explora cómo transformamos desafíos complejos en soluciones escalables. Desarrollo de software, infraestructura segura y resultados medibles.</p>
+        </div>
+
+        <div class="projects-grid">
+
+            <div class="project-card">
+                <div class="leviatham-seal"><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
+                <div class="card-body">
+                    <div class="project-header">
+                        <i class="fa-solid fa-moon project-icon"></i>
+                        <div>
+                            <h3 class="project-title">Tarot Astralis</h3>
+                            <span class="project-desc">Esoterismo Automatizado</span>
+                        </div>
+                    </div>
+                    <div class="tech-bio">
+                        Plataforma de generación de ingresos pasivos. Sistema de tiradas de tarot y horóscopo diario generado 100% por <strong>IA Leviatham</strong>, sin intervención humana. Optimizado para retención de usuario.
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">12</span></div>
+                        <div class="data-row"><span class="data-label">Anuncios:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">IA:</span><span class="val-yes">SÍ</span></div>
+                    </div>
+                    <a href="#" class="project-btn">VER PROYECTO</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="leviatham-seal"><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
+                <div class="card-body">
+                    <div class="project-header">
+                        <i class="fa-solid fa-gamepad project-icon" style="color:var(--secondary); text-shadow:0 0 10px var(--secondary);"></i>
+                        <div>
+                            <h3 class="project-title">ComicVerse</h3>
+                            <span class="project-desc">Comunidad & Gaming</span>
+                        </div>
+                    </div>
+                    <div class="tech-bio">
+                        Portal de entretenimiento masivo. Lector de cómics optimizado, integración de <strong>Juegos 2D</strong> en navegador, foros de discusión y sistema de rangos de usuario gamificado.
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">25+</span></div>
+                        <div class="data-row"><span class="data-label">Anuncios:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">IA:</span><span class="val-no">NO</span></div>
+                    </div>
+                    <a href="#" class="project-btn" style="border-color:var(--secondary); color:var(--secondary);">VER PROYECTO</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="leviatham-seal"><div class="seal-inner">???</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div>
+                    <div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a>
+                </div>
+            </div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+
+        </div>
+
+        <div class="workflow-section">
+            <div class="section-header" style="text-align:center; margin-bottom:50px;">
+                <h2>METODOLOGÍA DE TRABAJO</h2>
+                <p style="color:#aaa; font-size:0.9rem;">PROTOCOLO DE EJECUCIÓN</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-step">
+                    <div class="step-marker"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div class="step-content">
+                        <div class="phase-title">Fase 01: DISCOVERY & AUDIT</div>
+                        <div class="phase-desc">Entendemos el negocio, analizamos competidores y buscamos puntos críticos de seguridad antes de empezar.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-step step-2">
+                    <div class="step-marker"><i class="fa-solid fa-compass-drafting"></i></div>
+                    <div class="step-content">
+                        <div class="phase-title">Fase 02: ARQUITECTURA SEGURA</div>
+                        <div class="phase-desc">Diseñamos los planos de infraestructura y base de datos. Nada se codifica sin una estructura aprobada.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-step step-3">
+                    <div class="step-marker"><i class="fa-solid fa-code"></i></div>
+                    <div class="step-content">
+                        <div class="phase-title">Fase 03: DESARROLLO AGILE</div>
+                        <div class="phase-desc">Programación en sprints semanales. Código limpio, comentado y optimizado para velocidad.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-step step-4">
+                    <div class="step-marker"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="step-content">
+                        <div class="phase-title">Fase 04: HARDENING & DEPLOY</div>
+                        <div class="phase-desc">Blindaje del sistema contra ataques, pruebas de estrés y lanzamiento oficial al servidor de producción.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-step step-5">
+                    <div class="step-marker"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="step-content">
+                        <div class="phase-title">Fase 05: SCALING & EVOLUTION</div>
+                        <div class="phase-desc">El software es un organismo vivo. Monitoreamos métricas, escalamos recursos y aplicamos actualizaciones evolutivas.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="faq-header">
+                <h2>PREGUNTAS CLAVES</h2>
+            </div>
+            
+            <details class="faq-item">
+                <summary>¿El código fuente me pertenece?</summary>
+                <div class="faq-ans">Sí. Al finalizar el pago, transferimos la propiedad intelectual completa del código y las credenciales de acceso.</div>
+            </details>
+            
+            <details class="faq-item">
+                <summary>¿Firman acuerdos de confidencialidad (NDA)?</summary>
+                <div class="faq-ans">Absolutamente. Para proyectos sensibles, firmamos un NDA antes de escuchar tu idea para garantizar tu seguridad.</div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Qué pasa si necesito escalar la web?</summary>
+                <div class="faq-ans">Nuestra arquitectura es modular. Podemos agregar nuevas funciones o servidores más potentes sin tener que rehacer la web.</div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Ustedes manejan los servidores?</summary>
+                <div class="faq-ans">Podemos hacerlo. Ofrecemos servicios de administración de servidores (DevOps) para que no tengas que preocuparte por la técnica.</div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Cuánto tiempo tarda un desarrollo promedio?</summary>
+                <div class="faq-ans">Depende de la complejidad. Un MVP puede estar en 2 semanas, mientras que una plataforma compleja puede llevar 1 a 2 meses.</div>
+            </details>
+        </div>
+
+        <div class="copyright">
+            © 2025 LEVIATHAM CORE.
+        </div>
+
+    </div>
+
+    <script>
+        const headerTrigger = document.getElementById('header-trigger');
+        const navMenu = document.getElementById('nav-menu');
+        headerTrigger.addEventListener('click', (e) => {
+            if (!e.target.closest('a')) {
+                navMenu.classList.toggle('active');
+                document.querySelector('header').classList.toggle('open');
+            }
+        });
+    </script>
+
+</body>
+</html>
